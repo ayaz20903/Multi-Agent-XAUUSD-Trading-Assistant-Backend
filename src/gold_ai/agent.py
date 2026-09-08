@@ -59,11 +59,7 @@ You have access to these tools:
 7. calculate_position_size
    - Use this to calculate position/lot size.
 
-8. get_economic_calendar
-   - Use this when the user asks about USD economic events,
-     economic releases, or events that may affect XAUUSD.
-
-9. run_strategy2
+8. run_strategy2
    - Use this when the user asks for the current Strategy 2 signal,
      current Strategy 2 zones, breakout status, or whether Strategy 2
      currently indicates BUY, SELL, or WAIT.

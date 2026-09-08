@@ -157,14 +157,11 @@ def format_result(state: MessagesState):
 
             for item in result_data.get("results", []):
 
-                raw_content = item.get("content", "")
-                content = raw_content[:300] if raw_content else ""
-
                 news.append(
                     NewsItem(
                         title=item.get("title", ""),
                         url=item.get("url", ""),
-                        content=content,
+                        content=item.get("content", ""),
                         published_date=item.get("published_date"),
                     )
                 )

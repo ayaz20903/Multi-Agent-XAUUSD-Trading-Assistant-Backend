@@ -1,4 +1,4 @@
-from langchain_huggingface import HuggingFaceEmbeddings;
+from langchain_huggingface import HuggingFaceEmbeddings
 
 def create_embeddings():
     embeddings = HuggingFaceEmbeddings(

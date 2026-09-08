@@ -7,15 +7,11 @@ from langchain_core.messages import SystemMessage, AIMessage
 from pydantic import BaseModel
 from gold_ai.rag import create_llm
 from gold_ai.tools.calculator import (
-    calculate_risk_reward,
-    calculate_position_size,
-)
-from gold_ai.tools.strategy import search_strategy
-from gold_ai.tools.calculator import (
     calculate_risk_amount,
     calculate_risk_reward,
     calculate_position_size,
 )
+from gold_ai.tools.strategy import search_strategy
 
 llm = create_llm()
 
