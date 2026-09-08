@@ -8,8 +8,8 @@ from gold_ai.tools.strategy import search_strategy
 from langchain_core.messages import SystemMessage
 from gold_ai.tools.calculator import (
     calculate_risk_amount,
-    calculate_reward,
-    calculate_risk_reward
+    calculate_risk_reward,
+    calculate_position_size,
 )
 from gold_ai.tools.economic_calendar import get_economic_calendar
 from gold_ai.strategy2 import run_strategy2
@@ -22,8 +22,8 @@ tools = [
     search_gold_news,
     search_strategy,
     calculate_risk_amount,
-    calculate_reward,
     calculate_risk_reward,
+    calculate_position_size,
     get_economic_calendar,
     run_strategy2,
 ]
@@ -53,13 +53,17 @@ You have access to these tools:
 5. calculate_risk_amount
    - Use this to calculate monetary risk.
 
-6. calculate_reward
-   - Use this to calculate potential reward.
-
-7. calculate_risk_reward
+6. calculate_risk_reward
    - Use this to calculate risk, reward, and risk-reward ratio.
 
-8. run_strategy2
+7. calculate_position_size
+   - Use this to calculate position/lot size.
+
+8. get_economic_calendar
+   - Use this when the user asks about USD economic events,
+     economic releases, or events that may affect XAUUSD.
+
+9. run_strategy2
    - Use this when the user asks for the current Strategy 2 signal,
      current Strategy 2 zones, breakout status, or whether Strategy 2
      currently indicates BUY, SELL, or WAIT.

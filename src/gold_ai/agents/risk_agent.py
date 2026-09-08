@@ -184,10 +184,22 @@ def format_result(state: MessagesState):
 
     # No tool was called
     if not tool_messages:
+        # Check if the LLM produced a text response instead of calling a tool
+        ai_messages = [
+            message
+            for message in state["messages"]
+            if message.type == "ai" and message.content
+        ]
+
+        if ai_messages:
+            reason = ai_messages[-1].content
+        else:
+            reason = "No risk-management tool result was produced."
+
         result = RiskResult(
             status="error",
             result_type="calculation",
-            reason="No risk-management tool result was produced.",
+            reason=reason,
         )
 
         return {
@@ -246,12 +258,11 @@ def format_result(state: MessagesState):
             reason=strategy_text,
         )
 
-    # -----------------------------------------------------
+    # -------------------------------------------
     # Risk/reward calculation
-    # -----------------------------------------------------
+    # -------------------------------------------
 
-
-    if tool_name == "calculate_risk_amount":
+    elif tool_name == "calculate_risk_amount":
         if result_data.get("status") == "error":
             result = RiskResult(
                 status="error",
