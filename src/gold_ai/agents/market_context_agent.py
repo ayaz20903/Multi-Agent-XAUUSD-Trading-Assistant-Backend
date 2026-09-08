@@ -99,7 +99,11 @@ def market_context_agent(state: MessagesState):
 def route_after_agent(state: MessagesState):
     last_message = state["messages"][-1]
 
-    if last_message.tool_calls:
+    has_tool_results = any(
+        m.type == "tool" for m in state["messages"]
+    )
+
+    if last_message.tool_calls and not has_tool_results:
         return "tools"
 
     return "format_result"
@@ -153,11 +157,14 @@ def format_result(state: MessagesState):
 
             for item in result_data.get("results", []):
 
+                raw_content = item.get("content", "")
+                content = raw_content[:300] if raw_content else ""
+
                 news.append(
                     NewsItem(
                         title=item.get("title", ""),
                         url=item.get("url", ""),
-                        content=item.get("content", ""),
+                        content=content,
                         published_date=item.get("published_date"),
                     )
                 )
@@ -188,8 +195,15 @@ def format_result(state: MessagesState):
                     )
                 )
 
+    seen_urls = set()
+    unique_news = []
+    for item in news:
+        if item.url not in seen_urls:
+            seen_urls.add(item.url)
+            unique_news.append(item)
+
     result = MarketContextResult(
-        news=news,
+        news=unique_news,
         economic_events=economic_events,
         summary="Market context retrieved successfully.",
     )
