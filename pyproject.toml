@@ -1,0 +1,35 @@
+[project]
+name = "gold-ai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "affan  qureshi", email = "affanq243@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "chromadb>=1.5.9",
+    "ipykernel>=7.3.0",
+    "langchain-chroma>=1.1.0",
+    "langchain-community>=0.4.2",
+    "langchain-core>=1.6.1",
+    "langchain-google-genai>=4.4.0",
+    "langchain-groq>=1.1.3",
+    "langchain-huggingface>=1.2.2",
+    "langchain-openai>=1.6.0",
+    "langchain-text-splitters>=1.1.2",
+    "langchain>=0.2.5",
+    "pymupdf>=1.28.2",
+    "pypdf>=6.16.2",
+    "python-dotenv>=1.2.3",
+    "requests>=2.34.2",
+    "sentence-transformers>=6.0.1",
+    "tavily-python>=0.8.0",
+]
+
+[project.scripts]
+gold-ai = "gold_ai:main"
+
+[build-system]
+requires = ["uv_build>=0.12.9,<0.13.0"]
+build-backend = "uv_build"

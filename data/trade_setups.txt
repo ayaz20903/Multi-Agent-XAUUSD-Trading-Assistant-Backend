@@ -1,0 +1,164 @@
+XAUUSD Trade Setup Examples
+
+Setup 1: Valid Bearish Setup
+
+Market conditions:
+
+4H:
+The market is showing a bearish structure with lower highs and lower lows.
+
+1H:
+Price retraces into the 0.382–0.5 Fibonacci zone of the bearish impulse.
+
+15M:
+Price moves above a recent high and then rejects the level, creating a liquidity sweep.
+
+15M:
+Price subsequently breaks a relevant swing low, creating bearish Break of Structure.
+
+5M:
+Price retraces back toward the relevant area.
+
+5M:
+Bearish confirmation appears.
+
+Decision:
+
+The setup satisfies the preferred bearish sequence.
+
+4H bearish
+→
+1H Fibonacci zone
+→
+15M liquidity sweep
+→
+15M bearish BOS
+→
+5M retest
+→
+5M bearish confirmation
+
+This can be considered a SELL setup according to the strategy, provided risk management conditions are also satisfied.
+
+---
+
+Setup 2: Invalid Bearish Setup
+
+Market conditions:
+
+4H:
+Bearish trend.
+
+1H:
+Price reaches the Fibonacci zone.
+
+15M:
+No liquidity sweep occurs.
+
+15M:
+No bearish Break of Structure occurs.
+
+Decision:
+
+There is insufficient confirmation.
+
+The trader should not enter a SELL simply because price reached the Fibonacci zone.
+
+---
+
+Setup 3: Early Entry
+
+Market conditions:
+
+4H:
+Bearish trend.
+
+1H:
+Price reaches the Fibonacci zone.
+
+15M:
+Liquidity sweep occurs.
+
+However:
+
+15M bearish BOS has not occurred yet.
+
+Decision:
+
+The setup is incomplete.
+
+Do not enter simply because the liquidity sweep occurred.
+
+Wait for the required structural confirmation.
+
+---
+
+Setup 4: Poor Risk-to-Reward
+
+Market conditions:
+
+The technical setup is valid.
+
+Entry:
+3500
+
+Stop Loss:
+3490
+
+Potential Take Profit:
+3505
+
+Risk:
+10 points
+
+Potential Reward:
+5 points
+
+Risk-to-Reward:
+1:0.5
+
+Decision:
+
+The technical setup may be valid, but the risk-to-reward is poor.
+
+The trade should generally be avoided unless the trading plan explicitly allows such a setup.
+
+---
+
+Setup 5: Bullish Setup
+
+4H:
+Bullish market structure.
+
+1H:
+Price retraces into the 0.382–0.5 Fibonacci zone.
+
+15M:
+Price sweeps liquidity below a recent low.
+
+15M:
+Price breaks a relevant swing high.
+
+5M:
+Price retests the relevant area.
+
+5M:
+Bullish confirmation occurs.
+
+Decision:
+
+The preferred bullish sequence is complete.
+
+4H bullish
+→
+1H Fibonacci zone
+→
+15M liquidity sweep
+→
+15M bullish BOS
+→
+5M retest
+→
+5M bullish confirmation
+
+This can be considered a BUY setup according to the strategy, provided risk management conditions are satisfied.

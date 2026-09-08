@@ -1,0 +1,12 @@
+langchain
+langchain-core
+langchain-community
+langchain-openai
+langchain-text-splitters
+chromadb 
+python-dotenv
+pypdf
+pymupdf 
+langchain-google-genai
+langchain-groq
+tavily-python

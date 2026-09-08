@@ -1,0 +1,68 @@
+XAUUSD Trading Psychology
+
+Trading psychology is an important part of following a systematic trading strategy.
+
+1. Avoid FOMO
+
+Do not enter a trade simply because price is moving quickly.
+
+If the setup has already moved without providing the required entry conditions, wait for another opportunity.
+
+Missing a trade is better than entering an invalid setup.
+
+2. Avoid Revenge Trading
+
+After a losing trade, do not immediately enter another trade simply to recover the loss.
+
+The next trade should be evaluated independently.
+
+3. Avoid Overtrading
+
+A trader does not need to trade every market movement.
+
+Only take setups that satisfy the defined strategy.
+
+No valid setup means no trade.
+
+4. Follow the Process
+
+The goal is not to win every trade.
+
+The goal is to consistently execute the trading plan.
+
+A valid trade can lose money.
+
+An invalid trade can make money.
+
+The quality of the decision should be evaluated separately from the outcome.
+
+5. Do Not Chase Price
+
+If price has already moved significantly away from the planned entry area, do not chase the move.
+
+Wait for a new setup or a proper retracement.
+
+6. Accept Losses
+
+Losses are part of trading.
+
+A predefined stop loss should be accepted as part of the risk-management process.
+
+Do not move the stop loss simply because you do not want to accept the loss.
+
+7. Maintain Discipline
+
+Before entering a trade, confirm:
+
+- Higher timeframe direction
+- Fibonacci zone
+- Liquidity sweep
+- Break of Structure
+- Retest
+- Confirmation
+- Risk-to-reward
+- Position size
+- Stop loss
+- Take profit
+
+If the required conditions are not satisfied, do not force the trade.

@@ -1,0 +1,80 @@
+XAUUSD Risk Management Rules
+
+Risk management is a critical part of the trading strategy.
+
+1. Risk Per Trade
+
+Risk should be defined before entering a trade.
+
+The trader should know:
+- Entry price
+- Stop loss
+- Take profit
+- Position size
+- Maximum amount that can be lost
+
+Never increase position size simply because a trade looks highly likely to succeed.
+
+2. Stop Loss
+
+Every trade should have a predefined invalidation level.
+
+For a SELL setup:
+- The stop loss should be placed at a technically meaningful level where the bearish setup would be invalidated.
+
+For a BUY setup:
+- The stop loss should be placed at a technically meaningful level where the bullish setup would be invalidated.
+
+Avoid moving the stop loss farther away simply to avoid taking a loss.
+
+3. Risk-to-Reward Ratio
+
+The preferred minimum risk-to-reward ratio is 1:2.
+
+Example:
+
+If the trade risks $10, the planned reward should ideally be at least $20.
+
+Risk = $10
+Potential Reward = $20
+Risk-to-Reward = 1:2
+
+A setup with poor risk-to-reward may not be worth taking even if the technical setup looks good.
+
+4. Position Size
+
+Position size should be calculated based on:
+- Account balance
+- Percentage of account being risked
+- Entry price
+- Stop loss distance
+- Instrument specifications
+
+Do not choose lot size randomly.
+
+5. Trade Management
+
+Once a trade is active:
+- Do not make emotional decisions.
+- Follow the predefined trade plan.
+- Avoid moving the stop loss without a strategy-based reason.
+- Avoid increasing risk after entering.
+- Consider partial profit-taking only if it is part of the trading plan.
+
+6. Maximum Risk
+
+Avoid taking multiple trades that collectively expose the account to excessive risk.
+
+Correlated positions should be considered as part of the total portfolio risk.
+
+7. Losses
+
+A losing trade does not automatically mean the strategy failed.
+
+Evaluate whether:
+- The setup followed the strategy.
+- The entry was valid.
+- Risk management was followed.
+- The trade was affected by unexpected market conditions.
+
+Never increase risk simply to recover a previous loss.

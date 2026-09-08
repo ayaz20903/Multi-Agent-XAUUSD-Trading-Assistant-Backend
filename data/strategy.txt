@@ -1,0 +1,126 @@
+XAUUSD Trading Strategy
+
+Overview
+
+This strategy is designed for trading XAUUSD (Gold) using multiple timeframes. The strategy uses higher timeframe trend analysis, Fibonacci retracement zones, liquidity sweeps, Break of Structure (BOS), retests, and lower timeframe confirmation.
+
+1. Higher Timeframe Analysis
+
+4H Timeframe
+
+The 4H timeframe is used to determine the overall market direction.
+
+For a bullish setup:
+- The 4H market structure should be bullish.
+- Higher highs and higher lows should generally be present.
+
+For a bearish setup:
+- The 4H market structure should be bearish.
+- Lower highs and lower lows should generally be present.
+
+The higher timeframe provides the directional bias. Avoid taking trades that strongly conflict with the higher timeframe trend unless there is a clearly defined reversal setup.
+
+2. 1H Fibonacci Zone
+
+After determining the higher timeframe direction, analyze the 1H timeframe.
+
+The preferred Fibonacci retracement zone is between 0.382 and 0.5.
+
+For a bearish setup:
+- Identify the relevant bearish impulse move.
+- Wait for price to retrace into the 0.382–0.5 Fibonacci zone.
+- Do not enter simply because price reaches the Fibonacci zone.
+- Additional confirmation is required.
+
+For a bullish setup:
+- Identify the relevant bullish impulse move.
+- Wait for price to retrace into the 0.382–0.5 Fibonacci zone.
+- Additional confirmation is required before entering.
+
+3. 15M Liquidity Sweep
+
+Once price reaches the 1H Fibonacci zone, move to the 15M timeframe.
+
+Look for a liquidity sweep.
+
+A liquidity sweep occurs when price temporarily moves beyond an important recent high or low and then reverses.
+
+For a bearish setup:
+- Look for price to sweep liquidity above a relevant recent high.
+- Price should then show signs of rejection.
+
+For a bullish setup:
+- Look for price to sweep liquidity below a relevant recent low.
+- Price should then show signs of rejection.
+
+A liquidity sweep alone is not an entry signal.
+
+4. 15M Break of Structure
+
+After the liquidity sweep, wait for a Break of Structure.
+
+For a bearish setup:
+- Price should sweep liquidity above a relevant high.
+- Price should then break a relevant 15M swing low.
+- This provides bearish structural confirmation.
+
+For a bullish setup:
+- Price should sweep liquidity below a relevant low.
+- Price should then break a relevant 15M swing high.
+- This provides bullish structural confirmation.
+
+5. 5M Confirmation
+
+After the 15M Break of Structure, move to the 5M timeframe.
+
+Wait for price to retest the relevant area.
+
+For a bearish setup:
+- Wait for a bearish retest.
+- Look for bearish confirmation before entering.
+
+For a bullish setup:
+- Wait for a bullish retest.
+- Look for bullish confirmation before entering.
+
+6. Complete Bearish Setup
+
+The preferred bearish sequence is:
+
+4H bearish trend
+→
+1H Fibonacci 0.382–0.5 zone
+→
+15M liquidity sweep
+→
+15M bearish BOS
+→
+5M retest
+→
+5M bearish confirmation
+→
+SELL
+
+7. Complete Bullish Setup
+
+The preferred bullish sequence is:
+
+4H bullish trend
+→
+1H Fibonacci 0.382–0.5 zone
+→
+15M liquidity sweep
+→
+15M bullish BOS
+→
+5M retest
+→
+5M bullish confirmation
+→
+BUY
+
+Important Rule
+
+Do not enter a trade simply because one condition is present.
+
+The strategy requires confluence between multiple conditions.
