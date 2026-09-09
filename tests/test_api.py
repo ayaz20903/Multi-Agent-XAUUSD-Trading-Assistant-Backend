@@ -72,3 +72,85 @@ def test_chat_returns_agents(mock_graph):
     assert response.status_code == 200
     data = response.json()
     assert data["agents"] == ["risk"]
+
+
+@patch("gold_ai.api.routes.search_gold_news")
+@patch("gold_ai.api.routes.get_economic_calendar")
+@patch("gold_ai.api.routes.get_gold_price")
+@patch("gold_ai.api.routes.get_gold_candles")
+def test_market_analysis_success(
+    mock_candles, mock_price, mock_calendar, mock_news
+):
+    # Mock market data responses
+    mock_candles.side_effect = [
+        # 1h candles for trend detection
+        {
+            "status": "success",
+            "candles": [
+                {"high": 2400 + i, "low": 2380 + i, "close": 2390 + i}
+                for i in range(50)
+            ],
+        },
+        # 5m candles for strategy
+        {
+            "status": "success",
+            "candles": [
+                {"high": 2400 + i, "low": 2380 + i, "close": 2390 + i}
+                for i in range(300)
+            ],
+        },
+    ]
+    mock_price.return_value = {"status": "success", "price": 2410.50}
+
+    # Mock news response
+    mock_news.return_value = {
+        "status": "success",
+        "results": [
+            {
+                "title": "Gold rises on weaker dollar",
+                "content": "Gold prices climbed higher",
+                "url": "http://example.com",
+            }
+        ],
+    }
+
+    # Mock economic calendar response
+    mock_calendar.return_value = {
+        "status": "success",
+        "events": [
+            {"name": "CPI m/m", "time": "2026-09-09T12:30:00"}
+        ],
+    }
+
+    response = client.get("/api/market-analysis")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "ok"
+    assert "technical" in data
+    assert "market_context" in data
+    # Verify removed fields are not present
+    assert "dollar_strength" not in data["market_context"]
+    assert "treasury_yields" not in data["market_context"]
+
+
+def test_market_analysis_response_structure():
+    """Test that market analysis endpoint returns correct structure."""
+    # This test verifies the response model structure
+    # even if external API calls fail
+    response = client.get("/api/market-analysis")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "ok"
+    assert "technical" in data
+    assert "market_context" in data
+    # Verify technical fields
+    assert "trend" in data["technical"]
+    assert "structure" in data["technical"]
+    assert "liquidity" in data["technical"]
+    assert "signal" in data["technical"]
+    # Verify market context fields
+    assert "news" in data["market_context"]
+    assert "economic_events" in data["market_context"]
+    # Verify removed fields are not present
+    assert "dollar_strength" not in data["market_context"]
+    assert "treasury_yields" not in data["market_context"]

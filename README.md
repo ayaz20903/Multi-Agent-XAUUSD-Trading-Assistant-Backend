@@ -1,4 +1,4 @@
-# Gold AI
+# Multi-Agent XAUUSD Trading Assistant Backend
 
 XAUUSD multi-agent trading assistant with LangGraph and FastAPI.
 
