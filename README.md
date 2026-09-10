@@ -2,29 +2,55 @@
 
 XAUUSD multi-agent trading assistant with LangGraph and FastAPI.
 
-## Install
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GROQ_API_KEY` | Yes | Groq API key for LLM |
+| `TAVILY_API_KEY` | Yes | Tavily API key for news search |
+| `GOOGLE_API_KEY` | No | Google API key (optional) |
+| `CORS_ORIGINS` | No | Comma-separated allowed origins (default: `http://localhost:3000`) |
+
+## Local Setup
 
 ```bash
 uv sync
 cp .env.example .env  # add API keys
 ```
 
-## Start API
+## Start API (development)
 
 ```bash
-uv run uvicorn gold_ai.api.app:app --reload
+uv run uvicorn gold_ai.api.app:app --reload --port 8000
+```
+
+The vector store is automatically created from `data/` on first startup if missing.
+
+## Start API (production)
+
+```bash
+uv run gunicorn gold_ai.api.app:app \
+  -k uvicorn.workers.UvicornWorker \
+  -w 2 \
+  --bind 0.0.0.0:8000 \
+  --timeout 120
+```
+
+## Docker
+
+```bash
+docker build -t gold-ai-backend .
+docker run -p 8000:8000 \
+  -e GROQ_API_KEY=your_key \
+  -e TAVILY_API_KEY=your_key \
+  -e CORS_ORIGINS=https://your-frontend.vercel.app \
+  gold-ai-backend
 ```
 
 ## Health
 
 ```bash
 curl http://localhost:8000/health
-```
-
-Response:
-
-```json
-{"status": "ok"}
 ```
 
 ## Chat
@@ -35,13 +61,16 @@ curl -X POST http://localhost:8000/api/chat \
   -d '{"message": "What is the current Strategy 2 signal?"}'
 ```
 
-Response:
+## Market Analysis
 
-```json
-{
-  "response": "Strategy 2 signal: WAIT. Price is currently outside the defined trading zones...",
-  "agents": ["technical"]
-}
+```bash
+curl http://localhost:8000/api/market-analysis
+```
+
+## Strategy
+
+```bash
+curl http://localhost:8000/api/strategy
 ```
 
 ## Tests
@@ -49,3 +78,15 @@ Response:
 ```bash
 uv run pytest
 ```
+
+## Deploy to Railway
+
+1. Push to GitHub
+2. Create new Railway project from your repo
+3. Railway auto-detects the Dockerfile and builds
+4. Add environment variables in Railway dashboard:
+   - `GROQ_API_KEY`
+   - `TAVILY_API_KEY`
+   - `CORS_ORIGINS` (set your frontend domain)
+5. Railway sets `$PORT` automatically — the Dockerfile uses it
+6. The vector store is created automatically on first startup from `data/`

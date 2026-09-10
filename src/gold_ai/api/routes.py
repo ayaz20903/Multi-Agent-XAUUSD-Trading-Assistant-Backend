@@ -1,7 +1,10 @@
+import logging
 import re
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, HTTPException
+
+logger = logging.getLogger(__name__)
 
 from gold_ai.api.models import (
     ChatRequest,
@@ -226,6 +229,7 @@ def get_strategy():
         )
 
     except Exception as exc:
+        logger.exception("Strategy endpoint failed")
         raise HTTPException(
             status_code=500,
             detail="An internal error occurred while fetching strategy data.",
@@ -248,6 +252,7 @@ def chat(request: ChatRequest):
         return ChatResponse(response=response_text, agents=agents_used)
 
     except Exception as exc:
+        logger.exception("Chat endpoint failed")
         raise HTTPException(
             status_code=500,
             detail="An internal error occurred while processing your request.",
@@ -302,9 +307,7 @@ def get_market_analysis():
                                 signal_result = determine_trade_signal(price_zone, breakout)
                                 technical.signal = signal_result["signal"]
         except Exception:
-            pass
-
-        # --- Market Context ---
+            logger.debug("Strategy signal retrieval failed", exc_info=True)
         # Fetch news and summarize
         try:
             news_result = search_gold_news.invoke({"query": "XAUUSD gold price"})
@@ -314,7 +317,7 @@ def get_market_analysis():
                 content = latest_news.get("content", "")
                 market_context.news = summarize_news(title, content)
         except Exception:
-            pass
+            logger.debug("News retrieval failed", exc_info=True)
 
         # Fetch economic events and filter for major events only
         try:
@@ -325,7 +328,7 @@ def get_market_analysis():
                     calendar_result["events"]
                 )
         except Exception:
-            pass
+            logger.debug("Economic calendar retrieval failed", exc_info=True)
 
         return MarketAnalysisResponse(
             technical=technical,
@@ -334,6 +337,7 @@ def get_market_analysis():
         )
 
     except Exception as exc:
+        logger.exception("Market analysis endpoint failed")
         raise HTTPException(
             status_code=500,
             detail="An internal error occurred while fetching market analysis.",

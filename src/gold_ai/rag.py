@@ -2,13 +2,14 @@
 from langchain_groq import ChatGroq
 from gold_ai.config import GROQ_MODEL
 
+_llm_instance = None
+
 
 def create_llm():
-    llm = ChatGroq(
-        model=GROQ_MODEL
-    )
-
-    return llm
+    global _llm_instance
+    if _llm_instance is None:
+        _llm_instance = ChatGroq(model=GROQ_MODEL)
+    return _llm_instance
 
 def generate_answer(llm, query, documents):
     context = "\n\n".join(

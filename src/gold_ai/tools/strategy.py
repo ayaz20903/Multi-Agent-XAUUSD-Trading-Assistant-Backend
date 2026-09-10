@@ -1,21 +1,31 @@
 from langchain_core.tools import tool
 
-from gold_ai.embeddings import create_embeddings
-from gold_ai.vector_store import load_vector_store
 from gold_ai.retriever import retrieve_documents
 
 
-embeddings = create_embeddings()
-vector_store = load_vector_store(embeddings)
+_vector_store = None
+
+
+def _get_vector_store():
+    global _vector_store
+    if _vector_store is None:
+        from gold_ai.embeddings import create_embeddings
+        from gold_ai.vector_store import load_vector_store
+
+        embeddings = create_embeddings()
+        _vector_store = load_vector_store(embeddings)
+    return _vector_store
 
 
 @tool
 def search_strategy(query: str):
     """Search my XAUUSD trading strategy and return the most relevant information."""
 
+    vector_store = _get_vector_store()
+
     results = retrieve_documents(
         vector_store,
-        query
+        query,
     )
 
     if not results:
