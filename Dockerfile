@@ -37,4 +37,4 @@ RUN uv pip install --python .venv --no-deps torch --index-url https://download.p
 
 EXPOSE 8000
 
-CMD ["sh", "-c", ".venv/bin/python -m gunicorn gold_ai.api.app:app -k uvicorn.workers.UvicornWorker -w 2 --bind 0.0.0.0:${PORT:-8000} --timeout 120"]
+CMD ["sh", "-c", ".venv/bin/python -m gunicorn gold_ai.api.app:app -k uvicorn.workers.UvicornWorker -w 1 --bind 0.0.0.0:${PORT:-8000} --timeout 120"]
