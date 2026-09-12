@@ -79,14 +79,17 @@ curl http://localhost:8000/api/strategy
 uv run pytest
 ```
 
-## Deploy to Railway
+## Deploy to Render
 
 1. Push to GitHub
-2. Create new Railway project from your repo
-3. Railway auto-detects the Dockerfile and builds
-4. Add environment variables in Railway dashboard:
-   - `GROQ_API_KEY`
-   - `TAVILY_API_KEY`
-   - `CORS_ORIGINS` (set your frontend domain)
-5. Railway sets `$PORT` automatically — the Dockerfile uses it
-6. The vector store is created automatically on first startup from `data/`
+2. Create a new **Web Service** on Render
+3. Connect your GitHub repository
+4. Select **Docker** as the runtime environment
+5. Render auto-detects the Dockerfile and builds
+6. Add environment variables in Render dashboard:
+   - `GROQ_API_KEY` (required)
+   - `TAVILY_API_KEY` (required)
+   - `CORS_ORIGINS` (optional, e.g. `https://my-frontend.onrender.com`)
+7. Set the health check path to `/health`
+8. Render provides `$PORT` automatically — the Dockerfile uses it
+9. The vector store is created automatically on first startup from `data/`
