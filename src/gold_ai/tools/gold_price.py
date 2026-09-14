@@ -10,30 +10,33 @@ from langchain_core.tools import tool
 def get_gold_price():
     """Get the current XAUUSD gold price and its data freshness."""
 
-    url = "https://xaus.com/api/v1/spot?compact=1"
+    url = "https://api.gold-api.com/price/XAU"
 
     try:
         with urlopen(url, timeout=10) as response:
             data = json.load(response)
 
-        price = data["spot_usd_oz"]
-        data_state = data["data_state"]
+        price = data["price"]
 
-        as_of = datetime.fromisoformat(
-            data_state["as_of"].replace("Z", "+00:00")
-        )
+        timestamp = data.get("updatedAt")
 
-        now = datetime.now(timezone.utc)
-        age_seconds = (now - as_of).total_seconds()
+        if timestamp:
+            as_of = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+            now = datetime.now(timezone.utc)
+            age_seconds = (now - as_of).total_seconds()
+            timestamp_iso = as_of.isoformat()
+        else:
+            age_seconds = None
+            timestamp_iso = None
 
         return {
             "status": "success",
             "symbol": "XAUUSD",
             "price": price,
-            "timestamp": data_state["as_of"],
-            "age_seconds": round(age_seconds, 2),
-            "data_status": data_state["status"],
-            "source": data_state["source"],
+            "timestamp": timestamp_iso,
+            "age_seconds": round(age_seconds, 2) if age_seconds is not None else None,
+            "data_status": "fresh",
+            "source": "Gold API",
         }
 
     except HTTPError as e:
