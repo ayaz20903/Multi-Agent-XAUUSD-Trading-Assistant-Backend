@@ -1,3 +1,4 @@
+import re
 from typing import Literal
 
 from langgraph.graph import StateGraph, MessagesState, START
@@ -7,6 +8,7 @@ from pydantic import BaseModel
 
 from gold_ai.rag import create_llm
 from gold_ai.strategy2 import run_strategy2
+from gold_ai.tools.gold_price import get_gold_price
 
 
 llm = create_llm()
@@ -46,6 +48,18 @@ class TechnicalResult(BaseModel):
 structured_llm = llm.with_structured_output(TechnicalResult)
 
 
+_PRICE_QUERY_RE = re.compile(
+    r"\b(current|live|latest|recent)\b.*\b(price|quote)\b"
+    r"|\bprice\b.*\b(of\s+)?(gold|xau(?:usd)?)\b"
+    r"|\b(gold|xau(?:usd)?)\b.*\bprice\b",
+    re.IGNORECASE,
+)
+
+
+def _is_price_query(text: str) -> bool:
+    return bool(_PRICE_QUERY_RE.search(text))
+
+
 SYSTEM_PROMPT = """
 You are the Technical Analysis Agent.
 
@@ -64,6 +78,25 @@ IMPORTANT:
 
 
 def chatbot(state: MessagesState):
+
+    user_text = state["messages"][-1].content
+
+    if _is_price_query(user_text):
+        price_data = get_gold_price.invoke({})
+        response = structured_llm.invoke(
+            [
+                SystemMessage(content=(
+                    "You are formatting the result of a Technical Analysis Agent. "
+                    "The user asked for the current gold price. "
+                    "Convert the provided price data into the TechnicalResult structure. "
+                    "The data contains a 'price' field — use its value as current_price. "
+                    "Set signal to WAIT, price_zone and breakout to null. "
+                    "Preserve all numerical values exactly."
+                )),
+                ("user", str(price_data)),
+            ]
+        )
+        return {"messages": [AIMessage(content=response.model_dump_json())]}
 
     response = llm_with_tools.invoke(
         [
