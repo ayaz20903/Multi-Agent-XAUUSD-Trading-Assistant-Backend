@@ -3,7 +3,7 @@ import ast
 from typing import Literal
 from langgraph.graph import StateGraph, MessagesState, START
 from langgraph.prebuilt import ToolNode
-from langchain_core.messages import SystemMessage, AIMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from pydantic import BaseModel
 from gold_ai.rag import create_llm
 from gold_ai.tools.calculator import (
@@ -200,7 +200,7 @@ def format_result(state: MessagesState):
 
         return {
             "messages": [
-                AIMessage(
+                HumanMessage(
                     content=result.model_dump_json()
                 )
             ]
@@ -320,7 +320,7 @@ def format_result(state: MessagesState):
         if result_data.get("status") == "error":
             return {
                 "messages": [
-                    AIMessage(
+                    HumanMessage(
                         content=RiskResult(
                             status="error",
                             result_type="calculation",
@@ -332,7 +332,7 @@ def format_result(state: MessagesState):
 
         return {
             "messages": [
-                AIMessage(
+                HumanMessage(
                     content=RiskResult(
                         status="success",
                         result_type="calculation",
@@ -362,7 +362,7 @@ def format_result(state: MessagesState):
 
     return {
         "messages": [
-            AIMessage(
+            HumanMessage(
                 content=result.model_dump_json()
             )
         ]

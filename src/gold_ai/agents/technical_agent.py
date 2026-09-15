@@ -3,7 +3,7 @@ from typing import Literal
 
 from langgraph.graph import StateGraph, MessagesState, START
 from langgraph.prebuilt import ToolNode, tools_condition
-from langchain_core.messages import SystemMessage, AIMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from pydantic import BaseModel
 
 from gold_ai.rag import create_llm
@@ -96,7 +96,7 @@ def chatbot(state: MessagesState):
                 ("user", str(price_data)),
             ]
         )
-        return {"messages": [AIMessage(content=response.model_dump_json())]}
+        return {"messages": [HumanMessage(content=response.model_dump_json())]}
 
     response = llm_with_tools.invoke(
         [
@@ -134,7 +134,7 @@ IMPORTANT:
 
     return {
         "messages": [
-            AIMessage(content=response.model_dump_json())
+            HumanMessage(content=response.model_dump_json())
         ]
     }
 

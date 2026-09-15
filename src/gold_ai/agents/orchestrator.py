@@ -1,5 +1,6 @@
-from typing import Annotated
+from typing import Annotated, Callable
 
+from langchain_core.runnables import RunnableConfig
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from typing_extensions import TypedDict
@@ -16,23 +17,39 @@ class AgentState(TypedDict):
     agents: list[str]
 
 
-def supervisor(state: AgentState):
+def _get_agent_callback(config: RunnableConfig | None) -> Callable[[dict], None] | None:
+    """Extract the agent event callback from LangGraph config, if present."""
+    if config is None:
+        return None
+    configurable = config.get("configurable", {})
+    return configurable.get("on_agent_event")
+
+
+def supervisor(state: AgentState, config: RunnableConfig | None = None):
     query = state["messages"][-1].content
 
     decision = route_query(query)
 
     print(f"\nSupervisor selected: {decision.agents}")
 
+    callback = _get_agent_callback(config)
+    if callback:
+        callback({"type": "agent_completed", "agent": "supervisor"})
+
     return {
         "agents": decision.agents
     }
 
-def run_agents(state: AgentState):
+def run_agents(state: AgentState, config: RunnableConfig | None = None):
     user_query = state["messages"][-1].content
     results = []
+    callback = _get_agent_callback(config)
 
     for agent in state["agents"]:
         print(f"Running agent: {agent}")
+
+        if callback:
+            callback({"type": "agent_started", "agent": agent})
 
         if agent == "technical":
             task = (
@@ -65,20 +82,34 @@ def run_agents(state: AgentState):
             })
 
         else:
+            if callback:
+                callback({"type": "agent_completed", "agent": agent})
             continue
 
         results.append(result["messages"][-1])
+
+        if callback:
+            callback({"type": "agent_completed", "agent": agent})
 
     return {"messages": results}
 
 
 
-def final(state: AgentState):
+def final(state: AgentState, config: RunnableConfig | None = None):
     """
     Send all specialist results to the final decision agent.
     """
 
-    return final_agent(state)
+    callback = _get_agent_callback(config)
+    if callback:
+        callback({"type": "agent_started", "agent": "final"})
+
+    result = final_agent(state)
+
+    if callback:
+        callback({"type": "agent_completed", "agent": "final"})
+
+    return result
 
 
 builder = StateGraph(AgentState)

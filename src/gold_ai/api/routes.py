@@ -1,8 +1,11 @@
+import asyncio
+import json
 import logging
 import re
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import StreamingResponse
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +36,29 @@ from gold_ai.tools.news import search_gold_news
 from gold_ai.tools.economic_calendar import get_economic_calendar
 
 router = APIRouter()
+
+
+def _extract_text(content) -> str:
+    """Extract plain text from LLM response content.
+
+    Gemini returns content as a list of parts instead of a plain string.
+    This normalizes both formats to a single string.
+    """
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = []
+        for item in content:
+            if isinstance(item, dict) and item.get("type") == "text":
+                parts.append(item["text"])
+            elif isinstance(item, str):
+                parts.append(item)
+            elif hasattr(item, "text"):
+                parts.append(item.text)
+            else:
+                parts.append(str(item))
+        return "\n".join(parts) if parts else ""
+    return str(content)
 
 # Major XAUUSD-moving economic events
 MAJOR_ECONOMIC_EVENTS = [
@@ -262,7 +288,7 @@ def chat(request: ChatRequest):
             }
         )
 
-        response_text = result["messages"][-1].content
+        response_text = _extract_text(result["messages"][-1].content)
         agents_used = result.get("agents", [])
 
         return ChatResponse(response=response_text, agents=agents_used)
@@ -273,6 +299,78 @@ def chat(request: ChatRequest):
             status_code=500,
             detail="An internal error occurred while processing your request.",
         ) from exc
+
+
+@router.post("/api/chat/stream")
+async def chat_stream(request: ChatRequest):
+    """Stream agent activity events and the final response via SSE."""
+
+    loop = asyncio.get_running_loop()
+    queue: asyncio.Queue[dict | None] = asyncio.Queue()
+
+    def on_agent_event(event: dict) -> None:
+        loop.call_soon_threadsafe(queue.put_nowait, event)
+
+    async def run_graph() -> None:
+        try:
+            result = await loop.run_in_executor(
+                None,
+                lambda: graph.invoke(
+                    {
+                        "messages": [("user", request.message)],
+                        "agents": [],
+                    },
+                    config={"configurable": {"on_agent_event": on_agent_event}},
+                ),
+            )
+            response_text = _extract_text(result["messages"][-1].content)
+            agents_used = result.get("agents", [])
+            loop.call_soon_threadsafe(
+                queue.put_nowait,
+                {"type": "response", "content": response_text, "agents": agents_used},
+            )
+        except Exception as exc:
+            logger.exception("Chat stream graph execution failed")
+            loop.call_soon_threadsafe(
+                queue.put_nowait,
+                {
+                    "type": "response",
+                    "content": f"An error occurred while processing your request: {exc}",
+                    "agents": [],
+                },
+            )
+        finally:
+            loop.call_soon_threadsafe(queue.put_nowait, None)
+
+    asyncio.create_task(run_graph())
+
+    async def event_generator():
+        # Emit supervisor started immediately — it runs first in the graph
+        yield _sse_event({"type": "agent_started", "agent": "supervisor"})
+
+        while True:
+            event = await queue.get()
+            if event is None:
+                break
+            yield _sse_event(event)
+
+        # Signal completion
+        yield _sse_event({"type": "done"})
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+def _sse_event(data: dict) -> str:
+    """Format a dict as an SSE data frame."""
+    return f"data: {json.dumps(data)}\n\n"
 
 
 @router.get("/api/market-analysis", response_model=MarketAnalysisResponse)

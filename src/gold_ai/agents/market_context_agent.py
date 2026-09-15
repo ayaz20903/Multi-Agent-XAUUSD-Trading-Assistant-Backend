@@ -3,7 +3,7 @@ import json
 
 from langgraph.graph import StateGraph, MessagesState, START
 from langgraph.prebuilt import ToolNode
-from langchain_core.messages import SystemMessage, AIMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 
 from gold_ai.rag import create_llm
 from gold_ai.tools.news import search_gold_news
@@ -207,7 +207,7 @@ def format_result(state: MessagesState):
 
     return {
         "messages": [
-            AIMessage(
+            HumanMessage(
                 content=result.model_dump_json()
             )
         ]

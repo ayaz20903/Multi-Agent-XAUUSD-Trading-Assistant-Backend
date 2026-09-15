@@ -1,6 +1,6 @@
 
 from langchain_groq import ChatGroq
-from gold_ai.config import GROQ_MODEL
+from gold_ai.config import GROQ_API_KEY
 
 _llm_instance = None
 
@@ -8,7 +8,11 @@ _llm_instance = None
 def create_llm():
     global _llm_instance
     if _llm_instance is None:
-        _llm_instance = ChatGroq(model=GROQ_MODEL)
+        _llm_instance = ChatGroq(
+            model="openai/gpt-oss-120b",
+            api_key=GROQ_API_KEY,
+            temperature=0,
+        )
     return _llm_instance
 
 def generate_answer(llm, query, documents):
