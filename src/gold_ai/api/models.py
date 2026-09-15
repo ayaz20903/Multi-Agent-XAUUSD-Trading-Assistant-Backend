@@ -19,15 +19,20 @@ class HealthResponse(BaseModel):
     status: str = "ok"
 
 
+class PriceZone(BaseModel):
+    start: float | None = Field(None, description="Zone start price (lower boundary)")
+    end: float | None = Field(None, description="Zone end price (upper boundary)")
+
+
 class StrategyDataResponse(BaseModel):
     session_high: float | None = Field(None, description="Session high price")
     session_low: float | None = Field(None, description="Session low price")
     range_size: float | None = Field(None, description="Session range size")
     candle_count: int | None = Field(None, description="Number of session candles")
-    buy_level_1: float | None = Field(None, description="Buy zone level 1 (minor)")
-    buy_level_2: float | None = Field(None, description="Buy zone level 2 (major)")
-    sell_level_1: float | None = Field(None, description="Sell zone level 1 (minor)")
-    sell_level_2: float | None = Field(None, description="Sell zone level 2 (major)")
+    buy_level_1: PriceZone = Field(default_factory=PriceZone, description="Buy zone level 1 (minor)")
+    buy_level_2: PriceZone = Field(default_factory=PriceZone, description="Buy zone level 2 (major)")
+    sell_level_1: PriceZone = Field(default_factory=PriceZone, description="Sell zone level 1 (minor)")
+    sell_level_2: PriceZone = Field(default_factory=PriceZone, description="Sell zone level 2 (major)")
     signal: str = Field("WAIT", description="Current trading signal")
     status: str = Field("ok", description="Data availability status")
     reason: str | None = Field(None, description="Reason if data unavailable")

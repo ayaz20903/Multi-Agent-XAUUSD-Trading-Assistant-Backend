@@ -11,6 +11,7 @@ from gold_ai.api.models import (
     ChatResponse,
     HealthResponse,
     MarketAnalysisResponse,
+    PriceZone,
     StrategyDataResponse,
     TechnicalAnalysisData,
     MarketContextData,
@@ -215,15 +216,30 @@ def get_strategy():
         upside = levels["upside"]
         downside = levels["downside"]
 
+        buy_zones = zones["buy_zones"]
+        sell_zones = zones["sell_zones"]
+
         return StrategyDataResponse(
             session_high=session_range["session_high"],
             session_low=session_range["session_low"],
             range_size=session_range["range_size"],
             candle_count=session_range["candle_count"],
-            buy_level_1=round(downside["minor"]["level_1"], 3),
-            buy_level_2=round(downside["major"]["level_1"], 3),
-            sell_level_1=round(upside["minor"]["level_1"], 3),
-            sell_level_2=round(upside["major"]["level_1"], 3),
+            buy_level_1=PriceZone(
+                start=round(buy_zones["minor"]["low"], 3),
+                end=round(buy_zones["minor"]["high"], 3),
+            ),
+            buy_level_2=PriceZone(
+                start=round(buy_zones["major"]["low"], 3),
+                end=round(buy_zones["major"]["high"], 3),
+            ),
+            sell_level_1=PriceZone(
+                start=round(sell_zones["minor"]["low"], 3),
+                end=round(sell_zones["minor"]["high"], 3),
+            ),
+            sell_level_2=PriceZone(
+                start=round(sell_zones["major"]["low"], 3),
+                end=round(sell_zones["major"]["high"], 3),
+            ),
             signal=signal_result["signal"],
             status="ok",
         )
